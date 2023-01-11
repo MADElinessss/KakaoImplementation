@@ -33,6 +33,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <!--카카오 로그인 화면 뜨는거 -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

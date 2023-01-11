@@ -22,7 +22,7 @@
         android:id="@+id/tv_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="296dp"
+        android:layout_marginTop="424dp"
         android:text="ID: "
         android:textSize="20sp"
         app:layout_constraintHorizontal_bias="0.0"
@@ -34,7 +34,7 @@
         android:id="@+id/tv_ps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="340dp"
+        android:layout_marginTop="496dp"
         android:text="PW: "
         android:textSize="20sp"
         app:layout_constraintHorizontal_bias="0.0"
@@ -43,11 +43,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_hashkey"
+        android:id="@+id/tv_access_token"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="256dp"
-        android:text="해시?: "
+        android:layout_marginTop="312dp"
+        android:text="액세스 토큰?: "
         android:textSize="20sp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -83,10 +83,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="176dp"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="124dp"
         android:text="로그인 되었습니다."
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_logout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
