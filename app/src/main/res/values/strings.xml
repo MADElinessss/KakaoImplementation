@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">KakaoLogin5</string>
+    <string name="baseURL">wjdioqoinewin</string>
 </resources>
