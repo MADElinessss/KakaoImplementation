@@ -11,6 +11,7 @@ import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.model.User
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private var retrofit: Retrofit = RetrofitHelper.getRetrofitInstance() // RetrofitClient의 instance 불러오기
     private lateinit var binding : ActivityMainBinding
     private var authToken : String ?= null
+//    private var data: UserModel? = null
     var api : LoginService = retrofit.create(LoginService::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         retrofit = Retrofit.Builder()
-            .baseUrl("http://localhost:8080/oauth/kakao/")
+            .baseUrl("https://8e27-211-106-114-186.jp.ngrok.io/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -41,10 +43,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
             }
         }
-        UserApiClient.instance.me { user, error ->
-            binding.tvNickname.text = "닉네임: ${user?.kakaoAccount?.profile?.nickname}\n"
-            binding.tvId.text = "이메일: ${user?.kakaoAccount?.email}\n"
-        }
+
         /* Click_listener */
         binding.btnLogin.setOnClickListener {
             kakaoLogin() //로그인
@@ -52,18 +51,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnLogout.setOnClickListener {
             kakaoLogout() //로그아웃
         }
-        Runnable {//여기 토큰 자리 뭘까....
-            api.postAccessToken("access_token").enqueue(object : retrofit2.Callback<UserModel>{
-                override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-                    Log.d("통신 로그인..","response : ${response.body()?.accessToken}")
-                }
 
-                override fun onFailure(call: Call<UserModel>, t: Throwable) {
-                    Log.d("통신 로그인..", "전송 실패")
-                }
-
-            })
-        }.run()
     }
     private fun kakaoLogin() {
 
@@ -104,6 +92,37 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "카카오계정으로 로그인 성공 ${token.accessToken}")
                 binding.tvAccessToken.text = "access token : \n${token.accessToken}\n"
                 authToken = token.accessToken
+                Log.d("access_token", "${authToken}authToken")
+                //UserModel(accessToken = authToken.toString())
+            //data = UserModel(accessToken = authToken)
+                //saveData(id, pw)
+                Log.d("access_token2", "$authToken")
+                api.postAccessToken(UserModel(accessToken = authToken)).enqueue(object : retrofit2.Callback<LoginBackendResponse>{
+                    override fun onResponse(call: Call<LoginBackendResponse>, response: Response<LoginBackendResponse>) {
+                        Log.d("로그인 통신 성공", response.toString())
+                        Log.d("로그인 통신 성공", response.body().toString())
+
+                        when (response.code()) {
+                            200 -> {
+                                Log.d("로그인 성공" , "ggg")
+                            }
+                            405 -> Toast.makeText(
+                                this@MainActivity,
+                                "로그인 실패 : 아이디나 비번이 올바르지 않습니다",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            500 -> Toast.makeText(
+                                this@MainActivity,
+                                "로그인 실패 : 서버 오류",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LoginBackendResponse>, t: Throwable) {
+                        Log.d("통신 로그인..", "전송 실패")
+                    }
+                })
             }
         }
 
@@ -124,7 +143,7 @@ class MainActivity : AppCompatActivity() {
                     UserApiClient.instance.loginWithKakaoAccount(this@MainActivity, callback = callback)
                 } else if (token != null) {
                     Log.i(TAG, "카카오톡으로 로그인 성공 ${token.accessToken}")
-                    //binding.tvId.text = ${id.}
+
                 }
             }
         } else {

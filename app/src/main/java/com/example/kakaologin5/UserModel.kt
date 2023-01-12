@@ -5,8 +5,16 @@ package com.example.kakaologin5
 data class UserModel(
     //@SerializedName("status") val status: Int
     // => 코드상 변수명과 api에 정의된 이름을 다르게 할 때 사용
-    val accessToken : String
+    val accessToken : String ?= null
 )
+
+data class LoginBackendResponse(
+    val email : String,
+    //200: 성공, 300,400: 에러
+    val accessToken : String,
+    val refreshToken : String
+)
+
 
 /* 이렇게도 쓸 수 있음
 data class DataclassEx(
